@@ -41,6 +41,7 @@ std::ostream& operator<<(std::ostream& out, AnalysisResult& ar) {
 	    break;
 	default:
 	    assert(false);
+	    break;
     }
     return out;
 }

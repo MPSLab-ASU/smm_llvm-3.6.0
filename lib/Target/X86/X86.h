@@ -67,6 +67,9 @@ FunctionPass *createX86PadShortFunctions();
 /// to eliminate execution delays in some Atom processors.
 FunctionPass *createX86FixupLEAs();
 
+// Print estiamte stack frame size
+FunctionPass *createPrintStackSizePass();
+
 } // End llvm namespace
 
 #endif

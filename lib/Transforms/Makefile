@@ -9,7 +9,7 @@
 
 LEVEL = ../..
 #PARALLEL_DIRS = Utils Instrumentation Scalar InstCombine IPO Vectorize Hello ObjCARC
-PARALLEL_DIRS = SMMCommon StackMnmtHelper StackMnmt SmartStackMnmt EfficientStackMnmt CodeMnmtHelper CodeMnmt EfficientCodeMnmt EfficientGlobalMnmt
+PARALLEL_DIRS = SMMCommon StackMnmtHelper StackMnmt SmartStackMnmt EfficientStackMnmt CodeMnmtHelper CodeMnmt EfficientCodeMnmt GlobalMnmtHelper EfficientGlobalMnmt IntegratedMnmtHelper
 
 include $(LEVEL)/Makefile.config
 

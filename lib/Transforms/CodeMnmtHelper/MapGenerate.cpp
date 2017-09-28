@@ -154,8 +154,6 @@ PathsType CallPathFinder::getCallPaths(Function *root) {
 	break;
     }
 
-
-   
     if(hasUserFunctionCalls) {
 	// DFS visit the basic blocks of this function
 	LoopInfo &lpi = pass->getAnalysis<LoopInfo>(*root);
@@ -204,7 +202,6 @@ PathsType CallPathFinder::getCallPaths(Function *root) {
 			    lp = lp->getParentLoop();
 			}
 		    }
-		    //DEBUG(errs() << "\t\t" << *callInst << " loop nest: " << lpDepth << "\n");
 		    DEBUG(errs() << "\t\t" << *callInst << "\n");
 
 
@@ -217,12 +214,13 @@ PathsType CallPathFinder::getCallPaths(Function *root) {
 			DEBUG(errs() << "\t\t\t\t");
 			for (auto ji = ii->begin(), je = ii->end(); ji != je; ++ji) {
 			    Function *func = ji->first;
-			    //unsigned lpDepth = ji->second;
-			    //DEBUG(errs() << func->getName() << " " << lpDepth << " " );
+			    /*
 			    DEBUG(errs() << func->getName() << " ( " );
 			    for (auto ki = ji->second.begin(), ke = ji->second.end(); ki != ke; ++ki)
 				DEBUG(errs() << *ki << " ");
 			    DEBUG(errs() << " ) " );
+			    */
+			    DEBUG(errs() << func->getName() << " " );
 			}
 			DEBUG(errs() << "\n");
 		    }
@@ -266,14 +264,11 @@ PathsType CallPathFinder::getCallPaths(Function *root) {
 			DEBUG(errs() << "\t\t\t\t");
 			for (auto ji = ii->begin(), je = ii->end(); ji != je; ++ji) {
 			    Function *func = ji->first;
-			    //unsigned lpDepth = ji->second;
-			    //DEBUG(errs() << func->getName() << " " << lpDepth << " ");
 			    DEBUG(errs() << func->getName() << " ");
 			}
 			DEBUG(errs() << "\n");
 		    }
 		    DEBUG(errs() << "\n");
-
 		    assert(!paths.empty());
 		}
 
