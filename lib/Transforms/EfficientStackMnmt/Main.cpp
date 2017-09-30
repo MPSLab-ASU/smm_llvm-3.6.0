@@ -378,33 +378,31 @@ namespace {
 	    DEBUG(errs() << "}\n\n\n");
 
 
-	    /*
-	       DEBUG(errs() << "Inserting g2l functions...\n");
-	       DEBUG(errs() << "{\n");
-	       std::unordered_map<Function*, std::unordered_set<unsigned> > g2l_insert_pts;
+	    DEBUG(errs() << "Inserting g2l functions...\n");
+	    DEBUG(errs() << "{\n");
+	    std::unordered_map<Function*, std::unordered_set<unsigned> > g2l_insert_pts;
 
 	    // Decide g2l insert points
 	    for (auto mi = l2g_insert_pts.begin(), me = l2g_insert_pts.end(); mi != me; mi++) {
-	    CallInst *call_inst = mi->first;
-	    Function *func = call_inst->getCalledFunction();
-	    // Skip library functions
-	    if (isLibraryFunction(func))
-	    continue;
+		CallInst *call_inst = mi->first;
+		Function *func = call_inst->getCalledFunction();
+		// Skip library functions
+		if (isLibraryFunction(func))
+		    continue;
 
-	    for (auto si = mi->second.begin(), se = mi->second.end(); si != se; si++) {
-	    unsigned arg_index = *si;
-	    g2l_insert_pts[func].insert(arg_index);
-	    }
+		for (auto si = mi->second.begin(), se = mi->second.end(); si != se; si++) {
+		    unsigned arg_index = *si;
+		    g2l_insert_pts[func].insert(arg_index);
+		}
 	    }
 
 
 	    // Insert g2l functions. It must be done before l2g function so that it does not mess up l2g result
 	    for (auto ii = g2l_insert_pts.begin(), ie = g2l_insert_pts.end(); ii != ie; ii++) {
-	    g2l_instrumentation(mod,  ii->first, ii->second);
+		g2l_instrumentation(mod,  ii->first, ii->second);
 	    }
 
 	    DEBUG(errs() << "}\n");
-	     */
 
 	    // Insert l2g functions
 	    DEBUG(errs() << "Inserting l2g functions...\n");

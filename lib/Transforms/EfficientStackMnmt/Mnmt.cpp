@@ -36,8 +36,8 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
     GlobalVariable* stack_pointer = mod.getGlobalVariable("_stack_pointer");
 
     Function *func_g2l = mod.getFunction("_g2l");
-    //Function *func_ptr_wr = mod.getFunction("_ptr_wr");
-    //assert(func_ptr_wr);
+    Function *func_ptr_wr = mod.getFunction("_ptr_wr");
+    assert(func_ptr_wr);
 
     DEBUG(errs() << "\t" << func->getName() << " : " << arg_indices.size() << "\n");
 
@@ -48,7 +48,7 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
 	assert(ai->getType()->isPointerTy());
 	// Find user instructions of pointer arguments and replace the uses with the result of calling g2l on the arguments
 	Value *val = &*ai;
-	//Instruction *last_store = NULL;
+	Instruction *last_store = NULL;
 
 	DEBUG(errs() << "\t\t" << *val << " " << val->getNumUses() << "\n");
 
@@ -96,7 +96,6 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
 	    // Replace the uses of the pointer argument
 	    u->set(g2l_result);
 
-	    /*
 	    if (StoreInst *st_inst = dyn_cast <StoreInst> (user_inst)) { 
 		if (st_inst->getPointerOperand() == val)
 		    last_store = user_inst;
@@ -108,10 +107,8 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
 		    }
 		}
 	    }
-	    */
 
 	}
-	/*
 	if (last_store) {
 	    BasicBlock::iterator ii(last_store);
 	    BasicBlock::iterator in = ii;
@@ -128,7 +125,6 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
 	    builder.CreateCall(func_ptr_wr, wr_args);
 
 	}
-	*/
     }
 }
 

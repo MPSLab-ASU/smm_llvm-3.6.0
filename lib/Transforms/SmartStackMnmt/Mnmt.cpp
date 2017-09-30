@@ -42,8 +42,8 @@ void g2l_pointer_management_instrumentation(Module &mod, CallGraphNode *cgn) {
     GlobalVariable* stack_pointer = mod.getGlobalVariable("_stack_pointer");
 
     Function *func_g2l = mod.getFunction("_g2l");
-    //Function *func_ptr_wr = mod.getFunction("_ptr_wr");
-    //assert(func_ptr_wr);
+    Function *func_ptr_wr = mod.getFunction("_ptr_wr");
+    assert(func_ptr_wr);
 
     Function *func = cgn->getFunction();
 
@@ -88,7 +88,6 @@ void g2l_pointer_management_instrumentation(Module &mod, CallGraphNode *cgn) {
 		u->set(g2l_result);
 
 		// Insert a call to ptr_wr function after every store to the arguments or their GEP expressions.
-		/*
 		if (StoreInst *st_inst = dyn_cast <StoreInst>(user_inst)) {
 		    if (st_inst->getPointerOperand() ==  val) {
 			BasicBlock::iterator ii(insert_point);
@@ -127,7 +126,6 @@ void g2l_pointer_management_instrumentation(Module &mod, CallGraphNode *cgn) {
 			}
 		    }
 		}
-		*/
 	    }
 	}
 
