@@ -42,8 +42,8 @@ void g2l_pointer_management_instrumentation(Module &mod, CallGraphNode *cgn) {
     GlobalVariable* stack_pointer = mod.getGlobalVariable("_stack_pointer");
 
     Function *func_g2l = mod.getFunction("_g2l");
-    Function *func_ptr_wr = mod.getFunction("_ptr_wr");
-    assert(func_ptr_wr);
+    Function *func_g2l_wr = mod.getFunction("_g2l_wr");
+    assert(func_g2l_wr);
 
     Function *func = cgn->getFunction();
 
@@ -87,21 +87,21 @@ void g2l_pointer_management_instrumentation(Module &mod, CallGraphNode *cgn) {
 		// Replace the uses of the pointer argument
 		u->set(g2l_result);
 
-		// Insert a call to ptr_wr function after every store to the arguments or their GEP expressions.
+		// Insert a call to g2l_wr function after every store to the arguments or their GEP expressions.
 		if (StoreInst *st_inst = dyn_cast <StoreInst>(user_inst)) {
 		    if (st_inst->getPointerOperand() ==  val) {
 			BasicBlock::iterator ii(insert_point);
 			BasicBlock::iterator in = ii;
 			in++;
 			IRBuilder<>builder(&*in);
-			Value* arg1 = builder.CreatePointerCast(val, Type::getInt8PtrTy(context), "ptr_wr_arg");
+			Value* arg1 = builder.CreatePointerCast(val, Type::getInt8PtrTy(context), "g2l_wr_arg");
 			Value* arg2 = builder.getInt64(getTypeSize(dl, val->getType()->getPointerElementType()));
 			std::vector<Value *> wr_args;
 			wr_args.push_back(arg1);
 			wr_args.push_back(arg2);
 			//   Insert getSP(_stack_pointer)
 			builder.CreateCall(func_getSP, stack_pointer);
-			builder.CreateCall(func_ptr_wr, wr_args);
+			builder.CreateCall(func_g2l_wr, wr_args);
 		    }
 		} else if (user_inst->getOpcode() == Instruction::GetElementPtr) { 
 		    for (Value::use_iterator uui = user_inst->use_begin(), uue = user_inst->use_end(); uui != uue; uui++) {
@@ -114,14 +114,14 @@ void g2l_pointer_management_instrumentation(Module &mod, CallGraphNode *cgn) {
 				BasicBlock::iterator in = ii;
 				in++;
 				IRBuilder<>builder(&*in);
-				Value* arg1 = builder.CreatePointerCast(val, Type::getInt8PtrTy(context), "ptr_wr_arg");
+				Value* arg1 = builder.CreatePointerCast(val, Type::getInt8PtrTy(context), "g2l_wr_arg");
 				Value* arg2 = builder.getInt64(getTypeSize(dl, val->getType()->getPointerElementType()));
 				std::vector<Value *> wr_args;
 				wr_args.push_back(arg1);
 				wr_args.push_back(arg2);
 				//   Insert getSP(_stack_pointer)
 				builder.CreateCall(func_getSP, stack_pointer);
-				builder.CreateCall(func_ptr_wr, wr_args);
+				builder.CreateCall(func_g2l_wr, wr_args);
 			    }
 			}
 		    }
