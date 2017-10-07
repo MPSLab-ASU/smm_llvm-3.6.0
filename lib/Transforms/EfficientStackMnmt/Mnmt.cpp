@@ -36,8 +36,8 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
     GlobalVariable* stack_pointer = mod.getGlobalVariable("_stack_pointer");
 
     Function *func_g2l = mod.getFunction("_g2l");
-    Function *func_ptr_wr = mod.getFunction("_ptr_wr");
-    assert(func_ptr_wr);
+    Function *func_g2l_wr = mod.getFunction("_g2l_wr");
+    assert(func_g2l_wr);
 
     DEBUG(errs() << "\t" << func->getName() << " : " << arg_indices.size() << "\n");
 
@@ -114,7 +114,7 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
 	    BasicBlock::iterator in = ii;
 	    in++;
 	    IRBuilder<>builder(&*in);
-	    Value* arg1 = builder.CreatePointerCast(val, Type::getInt8PtrTy(context), "ptr_wr_arg");
+	    Value* arg1 = builder.CreatePointerCast(val, Type::getInt8PtrTy(context), "g2l_wr_arg");
 	    // Value* arg2 = builder.getInt64(getSizeOf(val->getType()->getPointerElementType()));
 	    Value* arg2 = builder.getInt64( getTypeSize(dl, val->getType()->getPointerElementType()) );
 	    std::vector<Value *> wr_args;
@@ -122,7 +122,7 @@ void g2l_instrumentation(Module &mod, Function *func, std::unordered_set<unsigne
 	    wr_args.push_back(arg2);
 	    //   Insert getSP(_stack_pointer)
 	    builder.CreateCall(func_getSP, stack_pointer);
-	    builder.CreateCall(func_ptr_wr, wr_args);
+	    builder.CreateCall(func_g2l_wr, wr_args);
 
 	}
     }
